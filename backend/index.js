@@ -8,7 +8,6 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 2000;
 
 app.get("/", async (req, res) => {
   res.status(200).send("connected");
@@ -44,8 +43,4 @@ app.post("/send-mail", async (req, res) => {
     console.log(error);
     res.send(500).send("something went wrong !");
   }
-});
-
-app.listen(PORT, async () => {
-  console.log(`http://localhost:${PORT}`);
 });
