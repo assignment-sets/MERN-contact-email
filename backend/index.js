@@ -6,8 +6,30 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+const allowedOrigins = [
+  "http://localhost:3000", // Your local frontend URL
+  "http://localhost:5173", // Vite's default dev server URL
+  "https://mern-contact-page.vercel.app", // Your deployed frontend URL
+  // Add any other allowed origins here
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.get("/", async (req, res) => {
   res.status(200).send("connected");
@@ -19,7 +41,7 @@ app.post("/send-mail", async (req, res) => {
   if (!name || !email || !message) {
     return res.status(400).send("send all the required items");
   }
-  
+
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -49,7 +71,7 @@ app.post("/send-mail", async (req, res) => {
 export default app;
 
 // If you want to run the server when not on Vercel, you can add:
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
