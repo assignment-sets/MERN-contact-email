@@ -31,16 +31,25 @@ app.post("/send-mail", async (req, res) => {
     });
 
     const info = await transporter.sendMail({
-      from: `"${name}" <${email}>`, // sender address using name and email from the request
-      to: "gourab.m099@gmail.com", // list of receivers
-      subject: "New Query", // Subject line
-      text: message, // plain text body using the message from the request
+      from: `"${name}" <${email}>`,
+      to: "gourab.m099@gmail.com",
+      subject: "New Query",
+      text: message,
       html: `<b>${message}</b>`,
     });
 
     res.status(200).send("email sent");
   } catch (error) {
     console.log(error);
-    res.send(500).send("something went wrong !");
+    res.status(500).send("something went wrong !");
   }
 });
+
+// Add this line to export the app
+export default app;
+
+// If you want to run the server when not on Vercel, you can add:
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
