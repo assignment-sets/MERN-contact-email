@@ -9,7 +9,6 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins = [
-  "http://localhost:3000", // Your local frontend URL
   "http://localhost:5173", // Vite's default dev server URL
   "https://mern-contact-page.vercel.app", // Your deployed frontend URL
   // Add any other allowed origins here
